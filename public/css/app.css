@@ -2,6 +2,7 @@
 /* header, 課題デザイン用にコメントアウト*/
 .container {
   margin: 0 10%;
+  padding-top: 50px;
   letter-spacing: 1px;
 }
 
@@ -163,6 +164,8 @@ form {
 }
 
 .col-md-6 {
+  margin-right: 10px;
+  /* 入力欄の開始位置を右にずらした分、枠のセンターが右にずれたためここで相殺 */
   padding-top: 5px;
 }
 
@@ -180,7 +183,7 @@ button {
 
 
 
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+/* @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'); */
 
 .fa-search {
   color: #333;
@@ -259,14 +262,6 @@ body {
   white-space: nowrap;
 }
 
-/* .laravel-button {
-  padding: 0px;
-  background-color: #fff;
-  color: #333;
-  border-radius: 3px;
-  text-decoration: none;
-  display: block;
-} */
 
 .laravel-button {
   padding: 15px 40px;

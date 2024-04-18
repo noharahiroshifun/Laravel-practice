@@ -14,51 +14,56 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-    // 元からあった内容。１つのページしか設定がされていない状態
-    // 第１引数「’ / ’」→このLaravelの中におけるルートディレクトリ（大元のフォルダ）のこと。
-    // →Laravelの一番トップにあたる「http://127.0.0.1:8000/」のことを指している
-
-    // 第2引数には「function() {~~」と関数が入っている
-    // 関数の中身の処理が「return view('welcome');」
-    // Laravelに初めから入っている、welcomeページを表示するためのファイルを呼び込んでいる
-});
 
 
- Route::get('hello', [PostsController::class, 'hello']);
-//register::get(index/search)
+Route::get('hello', [PostsController::class, 'hello']);
 
-// 新規投稿の際に必要なため削除しない
+// 第2引数に書いた[PostsController::class, 'hello']の箇所
+// この記述では「PostsControllerのhelloメソッド」という指定を意味していいる
+// →PostsController.php内にhelloメソッドを追加
+
+
+
+// 投稿一覧画面を表示
 Route::get('/index', [PostsController::class, 'index']);
+// /indexにGETリクエスト送信　→PostsControllerクラスのindexメソッド実行
 
-// あいまい検索用
+// あいまい検索
 Route::get('/search', [PostsController::class, 'index']);
-// Route::get('/search-posts', [PostsController::class, 'search']);
+// app.blade.phpのあいまい検索機能箇所actionに/searchを指定
 
-
-// 投稿フォーム画面用に追加
+// 新規投稿画面を表示
 Route::get('/create-form', [PostsController::class, 'createForm']);
 
-//CREATE用に追加
+// 新規投稿作成
 Route::post('/post/create', [PostsController::class, 'create']);
 
-// UPDATE用に追加
+// 投稿内容編集画面を表示
 Route::get('post/{id}/update-form', [PostsController::class, 'updateForm']);
 
-//レコードを更新する処理用に自分で追加
+// 投稿内容編集
 Route::post('/post/update', [PostsController::class, 'update']);
 
-//DELETE用に自分で追加
+// 投稿内容削除
 Route::get('/post/{id}/delete', [PostsController::class, 'delete']);
 
+// Auth認証関連用（新規登録、ログイン、ログアウトの画面表示・処理をこれ１つで設定できる）
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');おそらく不要
 
-
-// ログアウト時のリダイレクト先を指定
+// ログアウト（ログインぺージへ遷移）
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');
-// nameメソッドを使用して、ログアウトルートに名前を付ける
 
-Route::post('/register', [App\Http\Controllers\Auth\RegisterController::class, 'create']);
+
+Route::get('/login', function () { // ログインページへのURLを/loginに変更
+    return view('auth.login');
+})->name('login'); // nameを追加してroute('login')で呼び出せるようにする
+
+
+Route::get('/home', function () {
+    return redirect('/index');
+})->name('home');
+
+// === nameメソッド ===
+// 別の箇所で「route()」※()内にnameで指定した内容を記載することで、「function(){}」内の処理を実行できる

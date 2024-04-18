@@ -1,23 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-// RegisterControllerクラスがApp\Http\Controllers\Authという名前空間に属していることを示している
-// 名前が被ってしまうことを防ぐ
+// namespace...クラスや関数の名前が被らないように、どの階層（ネームスペース）に属している〇〇（クラスや関数名）と示してくれる
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
-
-
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-// use文 b...他のファイルにあるクラスを使える様にする
-
+use App\Http\Controllers\Controller;//Controller...他のコントローラークラスの基底となる共通の機能を提供
+use App\Providers\RouteServiceProvider;//RouteServiceProvider...ルーティングに関する機能を提供
+use App\Models\User;//モデルを使用できる機能を提供　データベース操作
+use Illuminate\Foundation\Auth\RegistersUsers;//ユーザー登録に関連する機能を提供
+use Illuminate\Support\Facades\Hash;//パスワードのハッシュ化機能を提供
+use Illuminate\Support\Facades\Validator;//入力データのバリデーション（正しい形式やルール通りかどうかのチェック）機能を提供
+// use...別の場所にある各機能を使うために必要
 
 class RegisterController extends Controller
-// RegisterControllerクラスを宣言
-// 新規アカウント登録に関わる処理用
+//RegisterController クラスを定義し、 Controller クラスを継承
 {
     /*
     |--------------------------------------------------------------------------
@@ -30,31 +25,27 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;//RegistersUsersクラスを使用。新規アカウント登録に関する一連の機能を提供するためのクラス
+    use RegistersUsers;//新しいユーザーの登録に関連するメソッドや処理を提供
 
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = '/login';
-    // 新規アカウント登録後にリダイレクトする先のURLを指定
-
-
+    protected $redirectTo = '/login';//アカウント登録した後にリダイレクトされるURLを指定
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() //コンストラクタ
+    public function __construct()
     {
         $this->middleware('guest');
+        // $this...現在のインスタンス（redirectTo）のこと
+        // middleware...リクエストがルートに到達する前に実行されるメソッド
+        // →ログインするときにユーザーがゲスト（ログインしていない）状態かどうかを確認
     }
-    //インスタンスが作られるたびに自動で実行
-    // guest...ログインしていないユーザーのみアクセスできる設定
-
-
 
     /**
      * Get a validator for an incoming registration request.
@@ -62,18 +53,21 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-
     protected function validator(array $data)
+    // 登録時の入力データのvalidator（ルール）を定義
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            //required...必須項目
+            //string...文字列
+            //max,min...最大,最小文字数
+            //email...メールアドレス（アドレス形式）
+            //unique:users...emailがuserテーブル内未登録かどうか
+            //confirmed...パスワードと確認用パスワードが一致しているかどうか
         ]);
     }
-    // validatorメソッド...入力データが作ったルールに従っているかをチェック
-
-
 
     /**
      * Create a new user instance after a valid registration.
@@ -81,15 +75,25 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-
     protected function create(array $data)
+    // $dataを引数として受け取る
     {
-    return User::create([
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'password' => Hash::make($data['password']),
-    ]);
-    }
-    // create...新規アカウントをデータベースに登録するためのメソッド
+        return User::create([
+        //User::create...Userモデルのcreateメソッドを呼び出して、新しいレコード（ユーザーアカウント）をDBに入れる
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            // Hash...ハッシュ化（パスワードなどのセキュリティ上大事なデータを難読化する）
+        ]);
 
+    }
 }
+
+// protected: 使用しているクラス内＆サブクラスからアクセス可能
+// public: 他のクラスから自由に呼び出せる
+// private: 使用しているクラス内でのみ呼び出せる　サブクラスから呼び出せない
+
+// function: 関数（メソッド）の宣言を開始。
+// create: メソッドの種類。新しいユーザーを作成する。
+// array: createメソッドの引数を配列に指定。$data という名前の配列を受け取る。
+// $data: メソッドの引数。新しいユーザーの情報が含まれた配列。（名前、メールアドレス、パスワードなど）

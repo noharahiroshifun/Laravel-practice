@@ -1,36 +1,35 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"><!-- 言語設定 -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- meta...ビューポートの設定 -->
+    <!-- width=device-width...ビューポートの幅をデバイスの幅に設定。
+         initial-scale=1...初期のズームレベルを1に設定。これによってレスポンシブデザインが可能になる。 -->
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <!-- CSRF Token（csrf攻撃を防ぐために記載） -->
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- app.name...ファイル名（Laravel）の指定。指定がない場合、''内の名前を使用 -->
 
-    <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- assetで指定したJavascriptファイルの読み込み。 -->
+    <!-- defer...ページの解析が完全に終了してからスクリプトを実行するように指定。
+    これがないと非同期で非同期でダウンロードされるため、読み込み時に遅延が起きてユーザーが待たされる可能性がある -->
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <!-- ロゴ用に追加 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
     <!-- 虫眼鏡(font awesome)用 -->
     <link href="https://use.fontawesome.com/releases/v6.4.0/css/all.css" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
 
+
+<body>
     <header>
         <div class="BBS-box">
             <h1>BBS.TOWN</h1>
-                          <!-- あいまい検索機能 -->
+            <!-- あいまい検索機能 -->
           <form class="search-box" action="/search" method="GET">
             <!-- searchに指定 -->
               <div class="form-group">
@@ -38,8 +37,8 @@
                   <input type="text" class="form-search" name="search_content" placeholder="投稿内容で検索">
                     <button type="submit fa" value="&#xf002;" class=" btn-primary"><i class="fa fa-search"></i></button>
               </div>
-
           </form>
+
             <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="navbar-wrapper">
 
@@ -50,32 +49,42 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
+                        @guest<!-- ログインしていない時に以下のコードを実行 -->
+                            @if (Route::has('login')) <!-- web.php内に'login'ルートがある場合、以下のコードを実行 -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('ログイン') }}</a>
+                                    <!-- ログインリンクを表示 -->
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('新規登録') }}</a>
+                                    <!-- 新規登録リンクを表示 -->
                                 </li>
                             @endif
-                        @else
+                            <!-- 「{」...XSS対策。自動でPHPのhtmlspecialchars関数を通してくれる -->
+                            <!-- [__]アンダーバー２本...他言語に対応するために記述 -->
+                            <!-- route('')...（）内のURLを生成 -->
+                            <!-- __('')...ログインリンクの表示名 -->
+                            @else
+                           <!-- ログインしている時に以下のコードを実行 -->
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                                    <a class="dropdown-item" href="{{ route('logout') }}"onclick="event.preventDefault();
+                                        // route('logout'...ルーディングでログアウト処理にlogoutと名前をつけたため、
+                                        // route('logout')と指定することでログアウト後にログインページへリダイレクトできる
+                                        // event.preventDefault()...通常行う動作のキャンセル　→ページ遷移をせずにログアウト処理ができる
                                        document.getElementById('logout-form').submit();">
+                                       <!-- getElementById...()内のフォームidを取得 ※aタグのすぐ下にある処理内容 -->
+                                       <!-- submit()...取得したフォームを自動で送信 -->
                                         {{ __('ログアウト') }}
                                     </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" >
                                         @csrf
+                                        <!-- csrf攻撃対策 -->
+                                        <!-- フォームに正しいCSRFトークンが入っていないとリクエストが失敗される -->
                                     </form>
                                 </div>
                             </li>
@@ -87,17 +96,9 @@
         </div>
     </header>
     <div id="app">
-
-                <a class="laravel-button" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-        <main class="py-4">
             @yield('content')
-        </main>
     </div>
+
     <footer>
         <small>Laravel@crud.curriculum</small>
     </footer>
