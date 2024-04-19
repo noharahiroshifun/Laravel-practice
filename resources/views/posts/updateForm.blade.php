@@ -15,12 +15,22 @@
             </div>
         {!! Form::close() !!}
 
-        <!-- エラーメッセージがあれば表示 -->
-        @if(session('error'))
+        <div class="alert"> <!-- 0419修正追加 -->
+            <!-- 空白エラー表示 -->
+            @error('upPost')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+            @enderror
+
+            <!-- 文字数制限エラー表示 -->
+            @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
-        @endif
+            @endif
+        </div>
+
     </div>
     <!-- 詳細はindex.blade.phpに記載 -->
 @endsection
