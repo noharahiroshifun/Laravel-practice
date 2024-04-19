@@ -14,7 +14,16 @@ use App\Http\Controllers\PostsController;
 |
 */
 
+Route::get('/', function () {//0419追加し直し
+    return view('welcome');
+    // 元からあった内容。１つのページしか設定がされていない状態
+    // 第１引数「’ / ’」→このLaravelの中におけるルートディレクトリ（大元のフォルダ）のこと。
+    // →Laravelの一番トップにあたる「http://127.0.0.1:8000/」のことを指している
 
+    // 第2引数には「function() {~~」と関数が入っている
+    // 関数の中身の処理が「return view('welcome');」
+    // Laravelに初めから入っている、welcomeページを表示するためのファイルを呼び込んでいる
+});
 
 Route::get('hello', [PostsController::class, 'hello']);
 
