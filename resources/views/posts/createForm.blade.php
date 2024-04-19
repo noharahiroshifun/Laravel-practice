@@ -44,8 +44,17 @@
      <!-- ①コマンド「composer require laravelcollective/html」でhtmlコードを省略できるライブラリをインストール -->
      <!-- ②「config」フォルダ（Laravelの各種設定をまとめてるフォルダ）の「app.php」で機能追加の記述をする -->
      <!-- ============================ -->
-               <!-- 文字数制限エラー用 -->
-      @if(session('error'))
+
+      <div class="alert"> <!-- 0419修正追加 -->
+        <!-- 空白エラー表示 -->
+        @error('newPost')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
+
+        <!-- 文字数制限エラー表示 -->
+        @if(session('error'))
           <div class="alert alert-danger">
               {{ session('error') }}
           </div>
