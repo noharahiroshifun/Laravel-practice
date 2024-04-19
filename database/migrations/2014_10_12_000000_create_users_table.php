@@ -13,16 +13,18 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+        Schema::create('users', function (Blueprint $table) {//0419修正追加
+            $table->increments('id');
+            $table->string('name',255);
+            $table->string('email',255)->unique();
+            // unique...一意性追加 同じ内容での登録ができなくなる
+            $table->timestamp('create_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('password',255);
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });
     }
+
 
     /**
      * Reverse the migrations.
