@@ -71,6 +71,13 @@ class PostsController extends Controller
   // 「GETパラメータ」つまり「ユーザーID」をコントローラーで受け取るための処理
   // $request(引数)→POSTでフォームが送られる時にこの引数に値が渡される
   {
+    $request->validate([ //0419修正追加
+    'newPost' => 'required|string|not_regex:/^\s*$/'
+    ], [
+    'newPost.required' => '投稿内容は必須です。',
+    'newPost.not_regex' => '投稿内容は必須です。'
+    ]);
+
     $userName = auth()->user()->name;
     // auth()->user()->nameは...現在のログインユーザー(auth()->user()-)の名前(->name)を取得
     $post = $request->input('newPost');
@@ -114,6 +121,13 @@ class PostsController extends Controller
   // ==============
   public function update(Request $request)
   {
+    $request->validate([ //0419修正追加
+     'upPost' => 'required|string|not_regex:/^\s*$/'
+    ], [
+      'upPost.required' => '投稿内容は必須です。',
+      'upPost.not_regex' => '投稿内容は必須です。'
+    ]);
+
     $id = $request->input('id');
     $up_post = $request->input('upPost');
     // [name]属性が[id][upPost]で指定されているフォームの値を別々の変数で取得
