@@ -57,15 +57,20 @@ class RegisterController extends Controller
     // 登録時の入力データのvalidator（ルール）を定義
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255','regex:/\S/'],//0419修正追加
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed','regex:/\S/'],//0419修正追加
+            ], [
+            'name.required' => '名前は必須です。',//0419修正追加
+            'email.required' => 'メールアドレスは必須です。',//0419修正追加
+            'password.required' => 'パスワードは必須です。',//0419修正追加
             //required...必須項目
             //string...文字列
             //max,min...最大,最小文字数
             //email...メールアドレス（アドレス形式）
             //unique:users...emailがuserテーブル内未登録かどうか
             //confirmed...パスワードと確認用パスワードが一致しているかどうか
+            //regex:/\S/...スペースのみを禁止
         ]);
     }
 
