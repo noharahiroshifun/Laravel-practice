@@ -14,8 +14,9 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-Route::get('/', function () {//0419追加し直し
-    return view('welcome');
+// Route::get('/', function () {
+    //0419追加し直し　→0424追加の内容があるため不要
+    // return view('welcome');
     // 元からあった内容。１つのページしか設定がされていない状態
     // 第１引数「’ / ’」→このLaravelの中におけるルートディレクトリ（大元のフォルダ）のこと。
     // →Laravelの一番トップにあたる「http://127.0.0.1:8000/」のことを指している
@@ -23,6 +24,10 @@ Route::get('/', function () {//0419追加し直し
     // 第2引数には「function() {~~」と関数が入っている
     // 関数の中身の処理が「return view('welcome');」
     // Laravelに初めから入っている、welcomeページを表示するためのファイルを呼び込んでいる
+// });
+
+Route::get('/', function () { //0424追加
+    return redirect('/login'); //リダイレクトでトップページにアクセスした時に自動でログインページに遷移
 });
 
 Route::get('hello', [PostsController::class, 'hello']);
