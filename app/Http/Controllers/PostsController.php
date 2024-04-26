@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;//indexメソッド様に追加
 
 class PostsController extends Controller
 {
-
   // ============
   // コンストラクタ
   // ============
@@ -72,7 +71,8 @@ class PostsController extends Controller
   // $request(引数)→POSTでフォームが送られる時にこの引数に値が渡される
   {
     $request->validate([ //0419修正追加
-    'newPost' => 'required|string|not_regex:/^\s*$/'
+    'newPost' => 'required|string|not_regex:/^[^\s\u3000]*$/u'//0424追加
+
     ], [
     'newPost.required' => '投稿内容は必須です。',
     'newPost.not_regex' => '投稿内容は必須です。'
@@ -122,7 +122,7 @@ class PostsController extends Controller
   public function update(Request $request)
   {
     $request->validate([ //0419修正追加
-     'upPost' => 'required|string|not_regex:/^\s*$/'
+     'upPost' => 'required|string|not_regex:/^[^\s\u3000]*$/u'//0424追加
     ], [
       'upPost.required' => '投稿内容は必須です。',
       'upPost.not_regex' => '投稿内容は必須です。'
