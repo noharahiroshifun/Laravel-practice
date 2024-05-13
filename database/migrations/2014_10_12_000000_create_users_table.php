@@ -13,8 +13,8 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {//0419修正追加
-            $table->increments('id');
+        Schema::create('users', function (Blueprint $table) { //0419修正追加
+            $table->integer('id', 11);
             $table->string('name',255);
             $table->string('email',255)->unique();
             // unique...一意性追加 同じ内容での登録ができなくなる
