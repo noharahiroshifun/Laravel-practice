@@ -70,13 +70,14 @@ class PostsController extends Controller
   // 「GETパラメータ」つまり「ユーザーID」をコントローラーで受け取るための処理
   // $request(引数)→POSTでフォームが送られる時にこの引数に値が渡される
   {
-    $request->validate([ //0419修正追加
-    'newPost' => 'required|string|not_regex:/^[^\s\u3000]*$/u'//0424追加
 
+    $request->validate([
+        'newPost' => ['required', 'string', 'not_regex:/^\s*[\x{3000}]+\s*$/u']//0511追加
     ], [
-    'newPost.required' => '投稿内容は必須です。',
-    'newPost.not_regex' => '投稿内容は必須です。'
+        'newPost.required' => '投稿内容は必須です。',
+        'newPost.not_regex' => '投稿内容は必須です。'
     ]);
+
 
     $userName = auth()->user()->name;
     // auth()->user()->nameは...現在のログインユーザー(auth()->user()-)の名前(->name)を取得
@@ -121,12 +122,13 @@ class PostsController extends Controller
   // ==============
   public function update(Request $request)
   {
-    $request->validate([ //0419修正追加
-     'upPost' => 'required|string|not_regex:/^[^\s\u3000]*$/u'//0424追加
+        $request->validate([
+        'upPost' => ['required', 'string', 'not_regex:/^\s*[\x{3000}]+\s*$/u']//0511追加
     ], [
-      'upPost.required' => '投稿内容は必須です。',
-      'upPost.not_regex' => '投稿内容は必須です。'
+        'upPost.required' => '投稿内容は必須です。',
+        'upPost.not_regex' => '投稿内容は必須です。'
     ]);
+
 
     $id = $request->input('id');
     $up_post = $request->input('upPost');
@@ -163,7 +165,6 @@ class PostsController extends Controller
 }
 
 
-
 // function...関数の呼び出し
 
 
@@ -184,3 +185,4 @@ class PostsController extends Controller
 // 'XXX' => 'YYY'..."XXX"という[名前]に"YYY"という[値]を関連付づける
 // →何が入っているかを明確にする時に便利
 // ==================
+
