@@ -28,10 +28,10 @@ class Posts extends Migration
             // function (Blueprint $table)...クロージャ（無名関数）のこと。テーブルの構造を定義している。
 
             // （）内がカラム名
-            $table->increments('id');
+            $table->integer('id', 11);
             // increments...自動で１増加した数字を格納するカラムを作成するメソッド
-            // 11...指定長さ
-           $table->string('user_name', 255); // 'user_name' カラムにデフォルト値を設定
+            // 11...指定長zさ
+            $table->string('user_name', 255); // 'user_name' カラムにデフォルト値を設定
             // string...文字列型のカラムを作成するメソッド
             // 255...指定長さ　※255文字が余分なデータを使わず効率的にデータを保存できる
             // user_nameカラムにデフォルト値が設定されていないとエラーが起きる
